@@ -58,6 +58,44 @@ class _DisplayVideoScreenState extends State<DisplayVideoScreen> {
     }
   }
 
+  // Stream<int> generateStream() {
+  //   late StreamController<int> controller;
+  //   late Timer timer;
+  //   int count = 0;
+
+  //   void generateData() {
+  //     if (count < 34) {
+  //       controller.add(0);
+  //       count++;
+  //     } else {
+  //       controller.add(1);
+  //       count = 0; // Reinicia a contagem após 60 segundos
+  //     }
+  //   }
+
+  //   void startTimer() {
+  //     timer = Timer.periodic(Duration(seconds: 1), (_) {
+  //       generateData();
+  //     });
+  //   }
+
+  //   controller = StreamController<int>(
+  //     onListen: startTimer,
+  //     onPause: () {
+  //       timer.cancel();
+  //     },
+  //     onResume: () {
+  //       startTimer();
+  //     },
+  //     onCancel: () {
+  //       timer.cancel();
+  //       controller.close();
+  //     },
+  //   );
+
+  //   return controller.stream;
+  // }
+
   void videoController() {
     // Carregamos os videos nas listas
     loadVideosFromDirectory();
@@ -74,24 +112,32 @@ class _DisplayVideoScreenState extends State<DisplayVideoScreen> {
     Stream<int> upcommingData = reader.stream
         .map((data) => int.tryParse(String.fromCharCodes(data)) ?? 0);
 
+    // Sensor de teste
+    // Stream<int> upcommingData = generateStream();
+
     // Carregamos a playlist segundaria no playerAd
-    playerAd.open(Playlist(secondaryList));
+    controllerAd.player.open(Playlist(secondaryList));
     // Para playerAd voltar a repetir a playlist
     playerAd.setPlaylistMode(PlaylistMode.loop);
 
     upcommingData.listen((data) {
+      print(data);
       switch (data) {
         case 1:
           // Se o video principal não estiver sendo executado
           if (!playerVideo.state.playing) {
+            controllerAd.player.pause();
+            controllerVideo.player.play();
             // Carregamos o video principal no Player
-            playerVideo.open(Playlist(primaryList));
+            controllerVideo.player.open(Playlist(primaryList));
             // Envia o controlador do playerVideo para que seja o pricipal
             streamVideoController.add(controllerVideo);
           }
         default:
           // Se o video principal ja foi reproduzido completo
           if (playerVideo.state.completed) {
+            controllerAd.player.play();
+            controllerVideo.player.pause();
             // Envia o controlador do playerAd para que seja o pricipal
             streamVideoController.add(controllerAd);
           }

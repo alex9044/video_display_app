@@ -75,7 +75,7 @@ class _SelectSerialScreenState extends State<SelectSerialScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => VideosSettingsScreen(),
+                  builder: (context) => const VideosSettingsScreen(),
                 ));
           },
           icon: const Icon(
