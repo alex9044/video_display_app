@@ -98,38 +98,64 @@ class _SelectSerialScreenState extends State<SelectSerialScreen> {
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    final serialPort = SerialPort(availablePorts[index]);
-                    final manufacturer = serialPort.manufacturer;
-                    serialPort.close();
-                    return ListTile(
-                      tileColor: Colors.grey[200],
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                      title: Center(
-                        child: Text(availablePorts[index],
-                            style: const TextStyle(fontSize: 18)),
+              availablePorts.isEmpty
+                  ? Container(
+                      height: 100.0,
+                      alignment: Alignment.center,
+                      child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(),
+                            backgroundColor: Colors.grey.shade100,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const DisplayVideoScreen(
+                                          receivedSerialPort: ''),
+                                ));
+                          },
+                          icon: const Icon(
+                            Icons.play_arrow_rounded,
+                            color: Colors.black,
+                          ),
+                          label: const Text(
+                            'Play',
+                            style: TextStyle(color: Colors.black),
+                          )))
+                  : Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          final serialPort = SerialPort(availablePorts[index]);
+                          final manufacturer = serialPort.manufacturer;
+                          serialPort.close();
+                          return ListTile(
+                            tileColor: Colors.grey[200],
+                            shape: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            title: Center(
+                              child: Text(availablePorts[index],
+                                  style: const TextStyle(fontSize: 18)),
+                            ),
+                            subtitle: Center(
+                              child: Text(manufacturer ?? "Desconocido",
+                                  style: const TextStyle(fontSize: 12)),
+                            ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DisplayVideoScreen(
+                                    receivedSerialPort: availablePorts[index]),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 8.0),
+                        itemCount: availablePorts.length,
                       ),
-                      subtitle: Center(
-                        child: Text(manufacturer ?? "Desconocido",
-                            style: const TextStyle(fontSize: 12)),
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DisplayVideoScreen(
-                              receivedSerialPort: availablePorts[index]),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8.0),
-                  itemCount: availablePorts.length,
-                ),
-              ),
+                    ),
             ],
           ),
         ),

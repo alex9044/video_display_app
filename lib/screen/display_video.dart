@@ -96,6 +96,15 @@ class _DisplayVideoScreenState extends State<DisplayVideoScreen> {
   //   return controller.stream;
   // }
 
+  void videoControllerWithoutSerial() {
+    // Carregamos os videos nas listas
+    loadVideosFromDirectory();
+    // Carregamos a playlist segundaria no playerAd
+    controllerAd.player.open(Playlist(secondaryList));
+    // Para playerAd voltar a repetir a playlist
+    playerAd.setPlaylistMode(PlaylistMode.loop);
+  }
+
   void videoController() {
     // Carregamos os videos nas listas
     loadVideosFromDirectory();
@@ -148,7 +157,9 @@ class _DisplayVideoScreenState extends State<DisplayVideoScreen> {
   @override
   void initState() {
     super.initState();
-    videoController();
+    widget.receivedSerialPort.isEmpty
+        ? videoControllerWithoutSerial()
+        : videoController();
   }
 
   @override

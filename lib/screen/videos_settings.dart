@@ -113,7 +113,7 @@ class _VideosSettingsScreenState extends State<VideosSettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'Videos Principal',
+                    'Video Principal',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w700),
                   ),
@@ -152,7 +152,7 @@ class _VideosSettingsScreenState extends State<VideosSettingsScreen> {
                       addVideoToDirectory('VideosPrincipal');
                       setState(() {});
                     },
-                    child: Text('Adicionar Vídeo em VideosPrincipal'),
+                    child: const Text('Agregar'),
                   ),
                 ],
               ),
@@ -201,7 +201,7 @@ class _VideosSettingsScreenState extends State<VideosSettingsScreen> {
                       addVideoToDirectory('VideosSecundario');
                       setState(() {});
                     },
-                    child: Text('Adicionar Vídeo em VideosSecundarios'),
+                    child: const Text('Agregar'),
                   ),
                 ],
               ),
